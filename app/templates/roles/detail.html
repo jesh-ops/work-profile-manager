@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ role.title }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>{{ role.title }}</h1>
+    <div class="text-muted">{{ role.company.name }}</div>
+  </div>
+  <div>
+    <a href="{{ url_for('roles.edit', role_id=role.id) }}" class="btn btn-outline-primary">Edit</a>
+    <form action="{{ url_for('roles.delete', role_id=role.id) }}" method="POST" class="d-inline">
+      <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Delete this role?')">Delete</button>
+    </form>
+  </div>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    {% if role.description %}
+      <p>{{ role.description }}</p>
+    {% else %}
+      <p class="text-muted mb-0">No description provided.</p>
+    {% endif %}
+    <div class="small text-muted">
+      {% if role.start_date %}Start: {{ role.start_date }}{% endif %}
+      {% if role.end_date %}<br>End: {{ role.end_date }}{% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Role{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h2 class="mb-4">Edit role</h2>
+        <form method="POST">
+          <div class="mb-3">
+            <label for="company_id" class="form-label">Company</label>
+            <select name="company_id" id="company_id" class="form-select" required>
+              {% for company in companies %}
+                <option value="{{ company.id }}" {% if role.company_id == company.id %}selected{% endif %}>{{ company.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" name="title" id="title" class="form-control" value="{{ role.title }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" id="description" class="form-control" rows="5">{{ role.description or '' }}</textarea>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="start_date" class="form-label">Start date</label>
+              <input type="date" name="start_date" id="start_date" class="form-control" value="{{ role.start_date or '' }}">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="end_date" class="form-label">End date</label>
+              <input type="date" name="end_date" id="end_date" class="form-control" value="{{ role.end_date or '' }}">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Save role</button>
+          <a href="{{ url_for('roles.detail', role_id=role.id) }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

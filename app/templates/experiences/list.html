@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Experiences{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>Experiences</h1>
+  </div>
+  <a href="{{ url_for('experiences.create') }}" class="btn btn-primary">+ Capture Experience</a>
+</div>
+
+{% if experiences %}
+  <div class="row g-3">
+    {% for experience in experiences %}
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <div class="small text-muted mb-1">{{ experience.experience_date }}</div>
+            <h4><a href="{{ url_for('experiences.detail', experience_id=experience.id) }}">{{ experience.title }}</a></h4>
+            <div class="text-muted small mb-2">{{ experience.company.name }} / {{ experience.project.name }}</div>
+            <p>{{ experience.problem[:180] }}{% if experience.problem|length > 180 %}...{% endif %}</p>
+            {% if experience.tags %}
+              <div>
+                {% for tag in experience.tags %}
+                  <span class="badge bg-light text-dark me-1">{{ tag.name }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-light border">
+    No experiences yet. Capture your first work experience to start building your career archive.
+  </div>
+{% endif %}
+{% endblock %}

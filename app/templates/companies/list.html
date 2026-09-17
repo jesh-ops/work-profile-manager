@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Companies{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>Companies</h1>
+  </div>
+  <a href="{{ url_for('companies.create') }}" class="btn btn-primary">+ Add company</a>
+</div>
+
+{% if companies %}
+  <div class="row g-3">
+    {% for company in companies %}
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h4><a href="{{ url_for('companies.detail', company_id=company.id) }}">{{ company.name }}</a></h4>
+            {% if company.description %}
+              <p class="text-muted mb-2">{{ company.description[:180] }}{% if company.description|length > 180 %}...{% endif %}</p>
+            {% endif %}
+            <div class="small text-muted">
+              {% if company.start_date %}{{ company.start_date }}{% endif %}
+              {% if company.start_date and company.end_date %} - {% endif %}
+              {% if company.end_date %}{{ company.end_date }}{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-light border">
+    No companies yet. Add your first company to begin organizing your work history.
+  </div>
+{% endif %}
+{% endblock %}

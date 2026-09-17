@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h1>Projects</h1>
+  </div>
+  <a href="{{ url_for('projects.create') }}" class="btn btn-primary">+ Add project</a>
+</div>
+
+{% if projects %}
+  <div class="row g-3">
+    {% for project in projects %}
+      <div class="col-md-6">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h4><a href="{{ url_for('projects.detail', project_id=project.id) }}">{{ project.name }}</a></h4>
+            <div class="text-muted small mb-2">{{ project.company.name }}</div>
+            {% if project.description %}
+              <p class="mb-2">{{ project.description[:180] }}{% if project.description|length > 180 %}...{% endif %}</p>
+            {% endif %}
+            <span class="badge bg-light text-dark">{{ project.status }}</span>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-light border">
+    No projects yet. Add your first project to track work streams.
+  </div>
+{% endif %}
+{% endblock %}
