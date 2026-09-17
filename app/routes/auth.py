@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import db
-from app.forms.auth import LoginForm, RegistrationForm
+from app.forms.auth import LoginForm, PasswordResetForm, RegistrationForm
 from app.models.user import User
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
@@ -45,6 +45,26 @@ def login():
         flash("Invalid email or password.", "danger")
 
     return render_template("auth/login.html", form=form)
+
+
+@auth_bp.route("/reset-password", methods=["GET", "POST"])
+def reset_password():
+    if current_user.is_authenticated:
+        return redirect(url_for("dashboard.index"))
+
+    form = PasswordResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data.lower()).first()
+        if user:
+            user.password_hash = generate_password_hash(form.password.data)
+            db.session.commit()
+            flash("Password reset successful. Please log in with your new password.", "success")
+            return redirect(url_for("auth.login"))
+
+        flash("If an account exists for that email, the password was reset. Please log in.", "info")
+        return redirect(url_for("auth.login"))
+
+    return render_template("auth/reset_password.html", form=form)
 
 
 @auth_bp.route("/logout")
